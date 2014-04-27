@@ -10,8 +10,7 @@ OUT='{ "date": '$(date "+%s")
 for __PARAM in $__PARAMS; do
 	case $__PARAM in
 		"system")	
-			SYSTEM=$(sh get_monitoring_system.sh)
-			OUT=$OUT', "system": '$SYSTEM
+			OUT=$OUT', "system": '$(sh get_monitoring_system.sh)
 			;;
 		"gps")	
 			. /usr/share/libubox/jshn.sh
@@ -19,6 +18,7 @@ for __PARAM in $__PARAMS; do
 			json_add_string "latitude" "$( uci get meshwizard.system.latitude )"
 			json_add_string "longitude" "$( uci get meshwizard.system.longitude )"
 			json_add_string "location" "$( uci get meshwizard.system.location )"
+
 			OUT=$OUT', "gps": '$( json_dump )
 			;;
 		"olsr")	
@@ -35,9 +35,8 @@ for __PARAM in $__PARAMS; do
 			OUT=$OUT', "network": { '
 			local j=0
 			for DEV in $NETWORK_DEVICES; do
-				NET_STATS=$( sh get_monitoring_network.sh $DEV )
 				[[ $j -gt 0 ]] && OUT=$OUT", "
-				OUT=$OUT' "'$DEV'": '$NET_STATS
+				OUT=$OUT' "'$DEV'": '$( sh get_monitoring_network.sh $DEV )
 				j=$( expr $j + 1 )
 			done
 			OUT=$OUT' }'
