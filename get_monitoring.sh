@@ -5,11 +5,13 @@ else
 	__PARAMS="$*"
 fi
 
+local __DIR=$( dirname $0 )
+
 OUT='{ "date": '$(date "+%s")
 for __PARAM in $__PARAMS; do
 	case $__PARAM in
 		"system")	
-			OUT=$OUT', "system": '$(sh get_monitoring_system.sh)
+			OUT=$OUT', "system": '$(sh $__DIR/get_monitoring_system.sh)
 			;;
 		"gps")	
 				. /usr/share/libubox/jshn.sh
@@ -33,7 +35,7 @@ for __PARAM in $__PARAMS; do
 			OUT=$OUT', "network": { '
 				OUT=$OUT'"clients": '$( cat /var/dhcp.leases | wc -l )
 				for DEV in $NETWORK_DEVICES; do
-					OUT=$OUT', "'$DEV'": '$( sh get_monitoring_network.sh $DEV )
+					OUT=$OUT', "'$DEV'": '$( sh $__DIR/get_monitoring_network.sh $DEV )
 				done
 			OUT=$OUT' }'
 			;;
