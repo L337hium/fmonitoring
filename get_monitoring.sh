@@ -34,9 +34,20 @@ for __PARAM in $__PARAMS; do
 
 			OUT=$OUT', "network": { '
 				OUT=$OUT'"clients": '$( cat /var/dhcp.leases | wc -l )
-				for DEV in $NETWORK_DEVICES; do
-					OUT=$OUT', "'$DEV'": '$( sh $__DIR/get_monitoring_network.sh $DEV )
-				done
+				
+				OUT=$OUT', "interfaces": [ '
+					local i=0
+					for DEV in $NETWORK_DEVICES; do
+						if [[ $i -eq 0 ]]; then
+							OUT=$OUT"$( sh $__DIR/get_monitoring_network.sh $DEV )"
+						else
+							OUT=$OUT", $( sh $__DIR/get_monitoring_network.sh $DEV )"
+						fi
+						i=$(expr $i + 1 )
+					done
+				
+				OUT=$OUT' ]'
+				
 			OUT=$OUT' }'
 			;;
 		*)

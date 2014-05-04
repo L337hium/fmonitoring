@@ -2,6 +2,8 @@
 # $1 = wan | lan | wlan | wlanadhoc
 [[ -z $1 ]] && exit 1
 
+IFNAME=$1
+
 get_device(){
 	. /usr/share/libubox/jshn.sh
 	json_load "$( ifstatus $1 )"
@@ -18,6 +20,8 @@ get_devstatus(){
 build_json(){
 	. /usr/share/libubox/jshn.sh
 	json_init
+	json_add_string "ifname" "$IFNAME"
+	json_add_string "device" "$( get_device $IFNAME )"
 	json_add_string "macaddr" "$MACADDR"
 	json_add_int "up" "$UP"
 	json_add_int "link" "$LINK"
@@ -29,7 +33,7 @@ build_json(){
 }
 
 . /usr/share/libubox/jshn.sh
-json_load "$( get_devstatus $1 )"
+json_load "$( get_devstatus $IFNAME )"
 json_get_var MACADDR macaddr
 json_get_var UP up
 json_get_var LINK link
