@@ -1,0 +1,5 @@
+#!/bin/sh
+
+SUCCESS=0
+E_NOARGS=65
+E_BADARGS=66

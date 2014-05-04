@@ -1,6 +1,7 @@
 #!/bin/bash
+. .ERRORCODES.sh
 
-[[ -z $@ ]] && echo "No router to deploy was specified." && exit 1
+[[ -z "$@" ]] && echo "No router to deploy was specified." && exit $E_BADARGS
 
 DIR=$( dirname $0 )
 DB="$DIR/nodes.db"
@@ -15,4 +16,4 @@ for i in $@; do
 	fi
 done
 
-exit 0
+exit $SUCCESS

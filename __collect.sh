@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+. .ERRORCODES.sh
 
 DIR=$( dirname $0 )
 DB="$DIR/nodes.db"
@@ -11,3 +11,5 @@ do
 	DATE=$( date "+%s" )
 	ssh -nqt root@$IP "sh /usr/share/fmonitoring/get_monitoring.sh" > "$DIR/$IP/$DATE.json"
 done < $DB
+
+exit 0
